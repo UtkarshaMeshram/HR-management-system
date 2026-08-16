@@ -1,0 +1,212 @@
+<br>
+<br>
+
+<div class="container">
+
+    <!-- Search by ID -->
+    <div>
+        <form (ngSubmit)="goToEmployee()">
+
+            <div class="form-group col-md-6 inline">
+
+                <input
+                    [(ngModel)]="EnteredID"
+                    type="number"
+                    class="form-control"
+                    id="id"
+                    name="id"
+                    placeholder="Search employee by ID">
+
+                <button
+                    class="btn btn-secondary"
+                    type="submit">
+                    Search
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+
+    <br>
+
+    <!-- Search + Filters -->
+    <div class="filter-container">
+
+        <!-- General Search -->
+        <div class="filter-item search-box">
+
+            <label>Search Employee</label>
+
+            <input
+                [(ngModel)]="searchText"
+                (ngModelChange)="applyFilters()"
+                type="text"
+                class="form-control"
+                placeholder="Search by name, email or ID">
+
+        </div>
+
+
+        <!-- Department -->
+        <div class="filter-item">
+
+            <label>Department</label>
+
+            <select
+                [(ngModel)]="selectedDepartment"
+                (ngModelChange)="applyFilters()"
+                class="form-control">
+
+                <option value="">All Departments</option>
+
+                <option
+                    *ngFor="let department of departments"
+                    [value]="department">
+
+                    {{ department }}
+
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Designation -->
+        <div class="filter-item">
+
+            <label>Designation</label>
+
+            <select
+                [(ngModel)]="selectedDesignation"
+                (ngModelChange)="applyFilters()"
+                class="form-control">
+
+                <option value="">All Designations</option>
+
+                <option
+                    *ngFor="let designation of designations"
+                    [value]="designation">
+
+                    {{ designation }}
+
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Clear -->
+        <div class="filter-item clear-button">
+
+            <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="clearFilters()">
+
+                Clear Filters
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <br>
+
+
+    <!-- Employee Table -->
+
+    <div>
+
+        <table
+            style="margin-bottom: 50px;"
+            class="table table-responsive table-striped border-dark">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th (click)="sortEmployees('id')" class="sortable">Id</th>
+
+                    <th (click)="sortEmployees('name')" class="sortable">Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th (click)="sortEmployees('salary')" class="sortable">Salary</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr *ngFor="let employee of filteredEmployees">
+
+                    <td>{{ employee.id }}</td>
+
+                    <td>{{ employee.fname }} {{ employee.lname }}</td>
+
+                    <td>{{ employee.email }}</td>
+
+                    <td>{{ employee.department }}</td>
+
+                    <td>{{ employee.designation }}</td>
+
+                    <td>{{ employee.salary }}</td>
+
+                    <td>
+
+                        <button
+                            (click)="updateEmployee(employee.id)"
+                            class="btn btn-secondary btn-sm">
+
+                            Update
+
+                        </button>
+
+                        <button
+                            (click)="deleteEmployee(employee.id)"
+                            class="btn btn-danger btn-sm"
+                            style="margin-left: 10px">
+
+                            Delete
+
+                        </button>
+
+                        <button
+                            (click)="detailsOfEmployee(employee.id)"
+                            class="btn btn-success btn-sm"
+                            style="margin-left: 10px">
+
+                            View
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <!-- Empty state -->
+
+        <div
+            *ngIf="filteredEmployees.length === 0"
+            class="empty-state">
+
+            <h4>No employees found</h4>
+
+            <p>Try changing your search or filter criteria.</p>
+
+        </div>
+
+    </div>
+
+</div>
