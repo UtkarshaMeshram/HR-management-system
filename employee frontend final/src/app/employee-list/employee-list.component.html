@@ -145,7 +145,7 @@
 
             <tbody>
 
-                <tr *ngFor="let employee of filteredEmployees">
+                <tr *ngFor="let employee of paginatedEmployees">
 
                     <td>{{ employee.id }}</td>
 
@@ -194,6 +194,29 @@
             </tbody>
 
         </table>
+
+        <div class="pagination" *ngIf="totalPages > 1">
+
+            <button
+                (click)="previousPage()"
+                [disabled]="currentPage === 1">
+                 Previous
+            </button>
+
+            <button
+                *ngFor="let page of [].constructor(totalPages); let i = index"
+                (click)="goToPage(i + 1)"
+                [class.active]="currentPage === i + 1">
+                {{ i + 1 }}
+            </button>
+
+            <button
+                (click)="nextPage()"
+                [disabled]="currentPage === totalPages">
+                Next
+            </button>
+
+        </div>
 
         <!-- Empty state -->
 

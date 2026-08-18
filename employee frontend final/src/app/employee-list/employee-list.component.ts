@@ -27,6 +27,10 @@ export class EmployeeListComponent {
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
+  pageSize = 5;          // employees shown per page
+  currentPage = 1;       // current page number
+  totalPages = 1;        // total number of pages
+
   constructor(
     private employeeService: EmployeeService,
     private router: Router
@@ -43,6 +47,7 @@ export class EmployeeListComponent {
 
       // Initially show all employees
       this.filteredEmployees = data;
+      this.updateTotalPages();
 
       // Get unique departments
       this.departments = [
@@ -63,6 +68,37 @@ export class EmployeeListComponent {
       ];
     });
   }
+
+  get paginatedEmployees() {
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+
+  return this.filteredEmployees.slice(startIndex, endIndex);
+}
+
+  updateTotalPages() {
+  this.totalPages = Math.ceil(
+    this.filteredEmployees.length / this.pageSize
+  );
+}
+
+  nextPage() {
+  if (this.currentPage < this.totalPages) {
+    this.currentPage++;
+  }
+}
+
+  previousPage() {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+  }
+}
+
+  goToPage(page: number) {
+  if (page >= 1 && page <= this.totalPages) {
+    this.currentPage = page;
+  }
+}
 
   // Search + filter employees
   applyFilters() {
@@ -90,6 +126,9 @@ export class EmployeeListComponent {
              matchesDepartment &&
              matchesDesignation;
     });
+
+    this.updateTotalPages();
+    this.currentPage = 1;
   }
 
   sortEmployees(column: string) {
@@ -128,6 +167,7 @@ export class EmployeeListComponent {
     this.selectedDesignation = '';
 
     this.filteredEmployees = this.employees;
+    this.updateTotalPages();
   }
 
   goToEmployee() {
